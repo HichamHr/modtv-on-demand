@@ -74,10 +74,16 @@ export async function getUserChannels(): Promise<UserChannel[]> {
   const user = await requireUser();
   const supabase = await createSupabaseServerClient();
 
+  type MemberWithChannel = {
+    role: ChannelMemberRow["role"];
+    channels: ChannelRow | null;
+  };
+
   const { data, error } = await supabase
     .from("channel_members")
     .select("role, channels (*)")
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .returns<MemberWithChannel[]>();
 
   if (error || !data) {
     return [];
@@ -86,7 +92,7 @@ export async function getUserChannels(): Promise<UserChannel[]> {
   return data
     .filter((row) => row.channels)
     .map((row) => ({
-      channel: row.channels as ChannelRow,
+      channel: row.channels!,
       role: row.role,
     }));
 }
