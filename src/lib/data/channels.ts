@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { requireUser } from "@/lib/auth";
 import { channelInputSchema, type ChannelInput } from "@/lib/validation/channel";
@@ -8,6 +9,12 @@ import type { Database } from "@/types/supabase";
 
 type ChannelRow = Database["public"]["Tables"]["channels"]["Row"];
 type ChannelMemberRow = Database["public"]["Tables"]["channel_members"]["Row"];
+type ChannelRole = ChannelMemberRow["role"];
+
+export type ChannelAccess = {
+  channel: ChannelRow;
+  role: ChannelRole;
+};
 
 export type CreateChannelResult =
   | { ok: true; slug: string; channelId: string }
@@ -160,4 +167,44 @@ export async function getMyRole(channelId: string): Promise<ChannelMemberRow["ro
   }
 
   return data.role;
+}
+
+export async function requireChannelMember(slug: string): Promise<ChannelAccess> {
+  const user = await requireUser();
+  const supabase = await createSupabaseServerClient();
+  const normalizedSlug = slug.trim().toLowerCase();
+
+  const { data: channel, error: channelError } = await supabase
+    .from("channels")
+    .select("*")
+    .eq("slug", normalizedSlug)
+    .single();
+
+  if (channelError || !channel) {
+    redirect("/dashboard?error=forbidden");
+  }
+
+  const { data: membership, error: memberError } = await supabase
+    .from("channel_members")
+    .select("role")
+    .eq("channel_id", channel.id)
+    .eq("user_id", user.id)
+    .single();
+
+  if (memberError || !membership) {
+    redirect("/dashboard?error=forbidden");
+  }
+
+  return { channel, role: membership.role };
+}
+
+export async function requireChannelRole(
+  slug: string,
+  allowedRoles: ChannelRole[]
+): Promise<ChannelAccess> {
+  const access = await requireChannelMember(slug);
+  if (!allowedRoles.includes(access.role)) {
+    redirect("/dashboard?error=forbidden");
+  }
+  return access;
 }
