@@ -20,6 +20,48 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Supabase Migrations
+
+This project manages database schema changes via SQL migrations in `supabase/migrations/`.
+
+### Install and initialize the Supabase CLI
+
+```bash
+npm install -D supabase
+npx supabase init
+```
+
+### Link to your Supabase project
+
+Replace `<your-project-ref>` with your Supabase project ref:
+
+```bash
+npx supabase link --project-ref <your-project-ref>
+```
+
+Note: This does not commit secrets. Keep your Supabase keys in `.env` (already ignored by git).
+
+### Run migrations locally
+
+Start the local Supabase stack, then reset the DB (runs migrations and seed):
+
+```bash
+npx supabase start
+npx supabase db reset
+```
+
+### Push migrations to the remote project
+
+```bash
+npx supabase db push
+```
+
+Safety note: avoid running `supabase db push` directly on production unless you have reviewed the migration output and have a rollback plan.
+
+### Seed data (optional)
+
+`supabase/seed.sql` inserts a demo channel and videos. It runs automatically with `supabase db reset`.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
