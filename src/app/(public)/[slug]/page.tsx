@@ -1,8 +1,10 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { BaseLayout } from "@/components/base-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { ChannelHero } from "@/components/public/ChannelHero";
+import { VideoGrid } from "@/components/public/VideoGrid";
 import {
   getChannelPublicBySlug,
   getPublishedVideosByChannelId,
@@ -28,41 +30,36 @@ export default async function ChannelStorefrontPage({ params }: ChannelPageProps
 
   return (
     <BaseLayout>
-      <main className="flex flex-col gap-8">
-        <header className="flex flex-col gap-2">
-          <h1 className="text-3xl font-semibold">{channel.name}</h1>
-          {channel.description ? (
-            <p className="text-sm text-muted-foreground">{channel.description}</p>
-          ) : null}
-        </header>
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-10">
+        <ChannelHero
+          name={channel.name}
+          description={channel.description}
+          videoCount={videos.length}
+        />
 
-        {videos.length === 0 ? (
-          <Card>
-            <CardHeader>
-              <CardTitle>No videos yet</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                This channel hasn&apos;t published any videos yet.
-              </p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {videos.map((video) => (
-              <Link key={video.id} href={`/${channel.slug}/videos/${video.id}`}>
-                <Card className="h-full transition hover:-translate-y-0.5 hover:shadow-lg">
-                  <CardHeader>
-                    <CardTitle className="text-lg">{video.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-sm text-muted-foreground">
-                    {video.description ?? "Watch the latest release."}
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+        <Separator />
+
+        <section id="videos" className="flex flex-col gap-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-semibold">Videos</h2>
           </div>
-        )}
+
+          {videos.length === 0 ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>No videos yet</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  This channel hasn&apos;t published any videos yet. Publish new
+                  releases from your dashboard to show them here.
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <VideoGrid slug={channel.slug} videos={videos} />
+          )}
+        </section>
       </main>
     </BaseLayout>
   );
