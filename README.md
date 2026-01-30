@@ -69,6 +69,8 @@ GitHub Actions runs lint, typecheck, and Playwright smoke tests on every push an
 Required GitHub Secrets:
 - `E2E_EMAIL`: test user email for smoke tests.
 - `E2E_PASSWORD`: test user password for smoke tests.
+- `NEXT_PUBLIC_SUPABASE_URL`: Supabase project URL used during CI build and E2E.
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase anon key used during CI build and E2E.
 
 ## Learn More
 
