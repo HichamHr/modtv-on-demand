@@ -4,6 +4,7 @@ on:
   push:
     branches: ["**"]
   pull_request:
+  repository_dispatch:
 
 jobs:
   quality:
@@ -55,4 +56,4 @@ jobs:
         if: always()
         uses: vercel/repository-dispatch/actions/status@v1
         with:
-          name: Vercel - modtv-on-demand: ci
+          name: "Vercel - modtv-on-demand: ci"
