@@ -3,6 +3,7 @@ import { z } from "zod";
 export const videoInputSchema = z.object({
   title: z.string().trim().min(2).max(80),
   description: z.string().trim().max(500).optional().or(z.literal("")),
+  url: z.string().trim().url(),
   thumbnail_url: z.string().trim().url().optional().or(z.literal("")),
   preview_url: z.string().trim().url().optional().or(z.literal("")),
   full_url: z.string().trim().url().optional().or(z.literal("")),

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ type VideoDialogProps = {
 type FormState = {
   title: string;
   description: string;
+  url: string;
   thumbnail_url: string;
   preview_url: string;
   full_url: string;
@@ -41,6 +43,7 @@ function toFormState(video?: VideoRow): FormState {
   return {
     title: video?.title ?? "",
     description: video?.description ?? "",
+    url: video?.url ?? "",
     thumbnail_url: video?.thumbnail_url ?? "",
     preview_url: video?.preview_url ?? "",
     full_url: video?.full_url ?? "",
@@ -51,6 +54,7 @@ function toFormState(video?: VideoRow): FormState {
 }
 
 export function VideoDialog({ slug, triggerLabel, initialVideo }: VideoDialogProps) {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [form, setForm] = React.useState<FormState>(() => toFormState(initialVideo));
   const [error, setError] = React.useState<string | null>(null);
@@ -74,6 +78,7 @@ export function VideoDialog({ slug, triggerLabel, initialVideo }: VideoDialogPro
     const payload: VideoInput = {
       title: form.title,
       description: form.description,
+      url: form.url,
       thumbnail_url: form.thumbnail_url,
       preview_url: form.preview_url,
       full_url: form.full_url,
@@ -99,6 +104,7 @@ export function VideoDialog({ slug, triggerLabel, initialVideo }: VideoDialogPro
       }
 
       setOpen(false);
+      router.refresh();
     });
   };
 
@@ -182,6 +188,18 @@ export function VideoDialog({ slug, triggerLabel, initialVideo }: VideoDialogPro
             </div>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium" htmlFor="video-url">
+                Video URL
+              </label>
+              <Input
+                id="video-url"
+                value={form.url}
+                onChange={(event) => handleChange("url", event.target.value)}
+                placeholder="https://"
+                required
+              />
+            </div>
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium" htmlFor="video-full">
                 Full URL

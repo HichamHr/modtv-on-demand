@@ -35,6 +35,7 @@ function normalizeInput(input: VideoInput) {
   return {
     title: input.title.trim(),
     description: toNullable(input.description),
+    url: input.url.trim(),
     thumbnail_url: toNullable(input.thumbnail_url),
     preview_url: toNullable(input.preview_url),
     full_url: toNullable(input.full_url),
@@ -140,6 +141,7 @@ export async function createVideo(
       created_by: access.userId,
       title: normalized.title,
       description: normalized.description,
+      url: normalized.url,
       thumbnail_url: normalized.thumbnail_url,
       preview_url: normalized.preview_url,
       full_url: normalized.full_url,
@@ -202,6 +204,7 @@ export async function updateVideo(
     .update({
       title: normalized.title,
       description: normalized.description,
+      url: normalized.url,
       thumbnail_url: normalized.thumbnail_url,
       preview_url: normalized.preview_url,
       full_url: normalized.full_url,

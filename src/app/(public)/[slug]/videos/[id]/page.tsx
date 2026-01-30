@@ -21,7 +21,7 @@ function isMp4(url: string) {
   return /\.mp4($|\?)/i.test(url);
 }
 
-function VideoPlayer({ url, title }: { url: string; title: string }) {
+function VideoPlayer({ url }: { url: string }) {
   return (
     <video
       className="aspect-video w-full rounded-xl bg-black/10 shadow-sm"
@@ -79,7 +79,7 @@ export default async function VideoDetailPage({ params }: VideoPageProps) {
               <h2 className="text-lg font-semibold">Preview</h2>
               {previewUrl ? (
                 isMp4(previewUrl) ? (
-                  <VideoPlayer url={previewUrl} title={`${video.title} preview`} />
+                  <VideoPlayer url={previewUrl} />
                 ) : (
                   <Button asChild variant="outline">
                     <a href={previewUrl} target="_blank" rel="noreferrer">
@@ -109,7 +109,7 @@ export default async function VideoDetailPage({ params }: VideoPageProps) {
                 <CardContent className="flex flex-col gap-4">
                   {fullUrl ? (
                     isMp4(fullUrl) ? (
-                      <VideoPlayer url={fullUrl} title={video.title} />
+                      <VideoPlayer url={fullUrl} />
                     ) : (
                       <Button asChild>
                         <a href={fullUrl} target="_blank" rel="noreferrer">
