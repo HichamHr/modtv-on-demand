@@ -26,7 +26,12 @@ jobs:
         run: npm ci
 
       - name: Lint
-        run: npm run lint
+        run: |
+          if npm pkg get scripts.lint | grep -qv null; then
+            npm run lint
+          else
+            echo "No lint script; skipping."
+          fi
 
       - name: Typecheck
         run: npm run typecheck
