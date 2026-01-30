@@ -6,6 +6,10 @@ on:
   pull_request:
   repository_dispatch:
 
+permissions:
+  contents: read
+  statuses: write
+
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -53,7 +57,7 @@ jobs:
         run: npx playwright test
 
       - name: 'notify vercel'
-        if: always()
+        if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
         uses: 'vercel/repository-dispatch/actions/status@v1'
         with:
           name: "Vercel - modtv-on-demand: ci"
