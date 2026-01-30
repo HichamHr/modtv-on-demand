@@ -6,6 +6,10 @@ on:
   pull_request:
   repository_dispatch:
 
+permissions:
+  contents: read
+  statuses: write
+
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -13,6 +17,8 @@ jobs:
       E2E_BASE_URL: http://localhost:3000
       E2E_EMAIL: ${{ secrets.E2E_EMAIL }}
       E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -53,7 +59,7 @@ jobs:
         run: npx playwright test
 
       - name: 'notify vercel'
-        if: always()
+        if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
         uses: 'vercel/repository-dispatch/actions/status@v1'
         with:
           name: "Vercel - modtv-on-demand: ci"
