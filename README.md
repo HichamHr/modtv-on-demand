@@ -62,6 +62,14 @@ Safety note: avoid running `supabase db push` directly on production unless you 
 
 `supabase/seed.sql` inserts a demo channel and videos. It runs automatically with `supabase db reset`.
 
+## CI Setup
+
+GitHub Actions runs lint, typecheck, and Playwright smoke tests on every push and PR.
+
+Required GitHub Secrets:
+- `E2E_EMAIL`: test user email for smoke tests.
+- `E2E_PASSWORD`: test user password for smoke tests.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

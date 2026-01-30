@@ -30,6 +30,7 @@ export function VideoCard({
       <Card className="h-full overflow-hidden transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-lg group-focus-visible:ring-2 group-focus-visible:ring-ring group-focus-visible:ring-offset-2">
         <div className="relative">
           {thumbnailUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={thumbnailUrl}
               alt={title}

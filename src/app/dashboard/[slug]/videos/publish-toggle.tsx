@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { setVideoPublishedAction } from "./actions";
@@ -12,6 +13,7 @@ type PublishToggleProps = {
 };
 
 export function PublishToggle({ slug, videoId, isPublished }: PublishToggleProps) {
+  const router = useRouter();
   const [isPending, startTransition] = React.useTransition();
 
   return (
@@ -22,6 +24,7 @@ export function PublishToggle({ slug, videoId, isPublished }: PublishToggleProps
       onClick={() => {
         startTransition(async () => {
           await setVideoPublishedAction(slug, videoId, !isPublished);
+          router.refresh();
         });
       }}
     >

@@ -23,6 +23,7 @@ export async function getChannelPublicBySlug(
     .from("channels")
     .select("id, title, slug, description")
     .eq("slug", normalizedSlug)
+    .eq("is_public", true)
     .single();
 
   if (error || !data) {
