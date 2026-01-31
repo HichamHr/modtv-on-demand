@@ -72,6 +72,9 @@ Required GitHub Secrets:
 - `NEXT_PUBLIC_SUPABASE_URL`: Supabase project URL used during CI build and E2E.
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase anon key used during CI build and E2E.
 
+Troubleshooting:
+- If the build fails on `/login` or `/signup` with "Missing Supabase environment variables", confirm the two `NEXT_PUBLIC_SUPABASE_*` secrets are set in the repo.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
