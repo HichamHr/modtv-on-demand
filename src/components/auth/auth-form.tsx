@@ -96,6 +96,13 @@ export function AuthForm({ mode, action }: AuthFormProps) {
               placeholder="********"
               required
             />
+            {isLogin ? (
+              <div className="flex justify-end">
+                <Link className="text-xs text-muted-foreground underline" href="/forgot-password">
+                  Forgot password?
+                </Link>
+              </div>
+            ) : null}
           </div>
           <SubmitButton label={isLogin ? "Sign in" : "Sign up"} />
         </form>

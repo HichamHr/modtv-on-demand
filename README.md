@@ -17,6 +17,7 @@ Multi-tenant VOD platform built with Next.js App Router and Supabase.
 ```
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+NEXT_PUBLIC_SITE_URL=https://modtv.hichamhr.com
 ```
 2) Install + run:
 ```
@@ -64,3 +65,12 @@ Required GitHub Secrets:
 Troubleshooting:
 - Build fails on `/login` or `/signup`: verify `NEXT_PUBLIC_SUPABASE_*` secrets exist in GitHub.
 - `Invalid Refresh Token: Already Used`: clear site cookies or use an incognito window.
+
+## Password Reset Email Setup (Supabase)
+In Supabase Dashboard → Auth → URL Configuration:
+- Set **Site URL** to your production domain (e.g. `https://modtv.hichamhr.com`)
+- Add **Redirect URLs**:
+  - `http://localhost:3000/reset-password`
+  - `https://<your-domain>/reset-password`
+
+This ensures reset links work in local dev and production.
